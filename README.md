@@ -1,5 +1,5 @@
 # Demonstrating localhost access through SSRF
-This repository contains the source-code for my blog article about abusing
+This repository contains the source-code for [my blog article](https://dev.to/aneshodza/accessing-local-services-with-ssrf-attacks-2cjb) about abusing
 SSRF to gain access to hidden services in localhost.  
 The architecture looks as follows:
 ![Server architecture](docs/ssrf-architecture.png)
