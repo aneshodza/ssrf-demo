@@ -1,0 +1,18 @@
+<h1>Customer list</h1>
+
+<ul id="customer-list">
+</ul>
+
+<script>
+  var customerList = document.getElementById("customer-list");
+
+  fetch('/api/v1/customer-data')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(customer => {
+        var listItem = document.createElement("li");
+        listItem.innerHTML = `${customer.firstname} ${customer.lastname}`;
+        customerList.appendChild(listItem);
+      });
+    });
+</script>

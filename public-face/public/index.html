@@ -17,16 +17,18 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, "text/html");
             const iconLink = doc.querySelector(
-              'link[rel="apple-touch-icon"]',
-            ).href;
+              'meta[property="og:image"]',
+            ).content;
 
             var li = document.createElement("li");
             var div = document.createElement("div");
+            div.style.display = "flex";
+            div.style.flexDirection = "column";
 
             var img = document.createElement("img");
             img.src = iconLink;
-            img.width = 16;
-            img.height = 16;
+            img.height = 100;
+            img.width = 222.22;
 
             var a = document.createElement("a");
             a.href = url;
@@ -57,7 +59,9 @@
 
       const formData = new FormData(this);
       const jsonObject = {};
-      formData.forEach((value, key) => { jsonObject[key] = value; });
+      formData.forEach((value, key) => {
+        jsonObject[key] = value;
+      });
       const jsonFormData = JSON.stringify(jsonObject);
 
       const actionURL = this.action;
