@@ -14,6 +14,10 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
+app.get('/api/v1/docs', (req, res) => {
+  res.sendFile('api-v1-docs.html', { root: `${__dirname}/public` });
+}
+
 app.get('/api/v1/db-proxy', async (req, res) => {
   const query = req.query.query;
   if (!query) {
