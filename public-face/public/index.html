@@ -1,0 +1,85 @@
+<h1>Welcome to your URL storage tool!</h1>
+<div>
+  Here is the content of your stored URLs:
+  <ul id="userlist"></ul>
+</div>
+
+<script>
+  var userlist = document.getElementById("userlist");
+  fetch("/api/v1/urls")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      data.forEach((url) => {
+        fetch(url)
+          .then((response) => response.text())
+          .then((html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const iconLink = doc.querySelector(
+              'link[rel="apple-touch-icon"]',
+            ).href;
+
+            var li = document.createElement("li");
+            var div = document.createElement("div");
+
+            var img = document.createElement("img");
+            img.src = iconLink;
+            img.width = 16;
+            img.height = 16;
+
+            var a = document.createElement("a");
+            a.href = url;
+            a.innerHTML = url;
+
+            div.appendChild(img);
+            div.appendChild(a);
+            li.appendChild(div);
+            userlist.appendChild(li);
+          });
+      });
+    });
+</script>
+
+<h2 style="margin-top: 60px">Submit a new URL</h2>
+<form action="/api/v1/add-url" method="post" id="urlForm">
+  <input type="text" id="url" name="url" placeholder="URL" />
+  <input type="submit" value="Submit" />
+</form>
+
+<p id="result"></p>
+
+<script>
+  document
+    .getElementById("urlForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const jsonObject = {};
+      formData.forEach((value, key) => { jsonObject[key] = value; });
+      const jsonFormData = JSON.stringify(jsonObject);
+
+      const actionURL = this.action;
+      const result = document.getElementById("result");
+
+      fetch(actionURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonFormData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          result.innerHTML = "URL added successfully!";
+          result.style.color = "green";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          result.innerHTML = "Error adding URL!";
+          result.style.color = "red";
+        });
+    });
+</script>
